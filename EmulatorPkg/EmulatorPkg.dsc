@@ -427,6 +427,14 @@
 
   MdeModulePkg/Application/HelloWorld/HelloWorld.inf
 
+  #
+  # my app
+  #
+  testpkg/applications/lvgl_test/lvgl_test.inf{
+    <LibraryClasses>
+    UefiUsbLib|MdePkg/Library/UefiUsbLib/UefiUsbLib.inf
+  }
+
   MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
   MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe.inf
   MdeModulePkg/Universal/DisplayEngineDxe/DisplayEngineDxe.inf
