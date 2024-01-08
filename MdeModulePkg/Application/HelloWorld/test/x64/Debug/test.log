@@ -1,0 +1,84 @@
+﻿  **********************************************************************
+  ** Visual Studio 2019 Developer Command Prompt v16.11.32
+  ** Copyright (c) 2021 Microsoft Corporation
+  **********************************************************************
+  [vcvarsall.bat] Environment initialized for: 'x86'
+            PATH      = C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\\Extensions\Microsoft\IntelliCode\CLI;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\HostX86\x86;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\VC\VCPackages;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\TestWindow;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\bin\Roslyn;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Team Tools\Performance Tools;C:\Program Files (x86)\Microsoft Visual Studio\Shared\Common\VSPerfCollectionTools\vs2019\;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\devinit;C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x86;C:\Program Files (x86)\Windows Kits\10\bin\x86;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\\MSBuild\Current\Bin;C:\Windows\Microsoft.NET\Framework\v4.0.30319;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\;C:\EDK2\edk2\BaseTools\Bin\Win32;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\HostX86\x64;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\HostX86\x86;C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x86;;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\tools;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\ide;C:\Program Files (x86)\HTML Help Workshop;;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin;C:\Windows\Microsoft.NET\Framework\v4.0.30319\;;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Users\tcr020\AppData\Local\Microsoft\WindowsApps;C:\Program Files\sourceforge\ipmiutil;C:\Program Files\sourceforge\ipmiutil;C:\Program Files\dotnet\;C:\Program Files\Git\cmd;C:\IASL;C:\NASM;C:\Users\tcr020\AppData\Local\Programs\Python\Python39;C:\Users\tcr020\AppData\Local\Programs\Python\Python39\Scripts\;C:\openssl-openssl-3.2.0;C:\Users\tcr020\AppData\Local\Programs\Python\Python39\Scripts\;C:\Users\tcr020\AppData\Local\Programs\Python\Python39\;C:\Users\tcr020\AppData\Local\Microsoft\WindowsApps;C:\Users\tcr020\.dotnet\tools;C:\Users\tcr020\AppData\Local\Programs\Microsoft VS Code\bin;;;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\VC\Linux\bin\ConnectionManagerExe
+  
+       WORKSPACE      = C:\EDK2
+   PACKAGES_PATH      = C:\EDK2\edk2;C:\EDK2\edk2-libc;C:\EDK2\edk2-my
+  EDK_TOOLS_PATH      = C:\EDK2\edk2\BaseTools
+  BASE_TOOLS_PATH     = C:\EDK2\edk2\BaseTools
+   EDK_TOOLS_BIN      = C:\EDK2\edk2\BaseTools\Bin\Win32
+       CONF_PATH      = C:\EDK2\edk2\Conf
+  
+  Using EDK2 in-source Basetools
+                 PATH = C:\EDK2\edk2\BaseTools\BinWrappers\WindowsLike;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\\Extensions\Microsoft\IntelliCode\CLI;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\HostX86\x86;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\VC\VCPackages;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\TestWindow;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\bin\Roslyn;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Team Tools\Performance Tools;C:\Program Files (x86)\Microsoft Visual Studio\Shared\Common\VSPerfCollectionTools\vs2019\;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\devinit;C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x86;C:\Program Files (x86)\Windows Kits\10\bin\x86;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\\MSBuild\Current\Bin;C:\Windows\Microsoft.NET\Framework\v4.0.30319;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\;C:\EDK2\edk2\BaseTools\Bin\Win32;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\HostX86\x64;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\HostX86\x86;C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x86;;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\tools;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\ide;C:\Program Files (x86)\HTML Help Workshop;;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin;C:\Windows\Microsoft.NET\Framework\v4.0.30319\;;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Users\tcr020\AppData\Local\Microsoft\WindowsApps;C:\Program Files\sourceforge\ipmiutil;C:\Program Files\sourceforge\ipmiutil;C:\Program Files\dotnet\;C:\Program Files\Git\cmd;C:\IASL;C:\NASM;C:\Users\tcr020\AppData\Local\Programs\Python\Python39;C:\Users\tcr020\AppData\Local\Programs\Python\Python39\Scripts\;C:\openssl-openssl-3.2.0;C:\Users\tcr020\AppData\Local\Programs\Python\Python39\Scripts\;C:\Users\tcr020\AppData\Local\Programs\Python\Python39\;C:\Users\tcr020\AppData\Local\Microsoft\WindowsApps;C:\Users\tcr020\.dotnet\tools;C:\Users\tcr020\AppData\Local\Programs\Microsoft VS Code\bin;;;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\VC\Linux\bin\ConnectionManagerExe
+           PYTHONPATH = C:\EDK2\edk2\BaseTools\Source\Python;
+  
+  
+  !!! WARNING !!! NASM_PREFIX environment variable is not set
+    Found nasm.exe, setting the environment variable to C:\nasm\
+  
+  !!! WARNING !!! CLANG_BIN environment variable is not set
+  
+  !!! WARNING !!! No CYGWIN_HOME set, gcc build may not be used !!!
+  
+            PATH      = C:\EDK2\edk2\BaseTools\BinWrappers\WindowsLike;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\\Extensions\Microsoft\IntelliCode\CLI;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\HostX86\x86;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\VC\VCPackages;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\TestWindow;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\bin\Roslyn;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Team Tools\Performance Tools;C:\Program Files (x86)\Microsoft Visual Studio\Shared\Common\VSPerfCollectionTools\vs2019\;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\devinit;C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x86;C:\Program Files (x86)\Windows Kits\10\bin\x86;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\\MSBuild\Current\Bin;C:\Windows\Microsoft.NET\Framework\v4.0.30319;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\;C:\EDK2\edk2\BaseTools\Bin\Win32;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\HostX86\x64;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\HostX86\x86;C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x86;;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\tools;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\ide;C:\Program Files (x86)\HTML Help Workshop;;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin;C:\Windows\Microsoft.NET\Framework\v4.0.30319\;;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Users\tcr020\AppData\Local\Microsoft\WindowsApps;C:\Program Files\sourceforge\ipmiutil;C:\Program Files\sourceforge\ipmiutil;C:\Program Files\dotnet\;C:\Program Files\Git\cmd;C:\IASL;C:\NASM;C:\Users\tcr020\AppData\Local\Programs\Python\Python39;C:\Users\tcr020\AppData\Local\Programs\Python\Python39\Scripts\;C:\openssl-openssl-3.2.0;C:\Users\tcr020\AppData\Local\Programs\Python\Python39\Scripts\;C:\Users\tcr020\AppData\Local\Programs\Python\Python39\;C:\Users\tcr020\AppData\Local\Microsoft\WindowsApps;C:\Users\tcr020\.dotnet\tools;C:\Users\tcr020\AppData\Local\Programs\Microsoft VS Code\bin;;;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\VC\Linux\bin\ConnectionManagerExe
+  
+       WORKSPACE      = C:\EDK2
+   PACKAGES_PATH      = C:\EDK2\edk2;C:\EDK2\edk2-libc;C:\EDK2\edk2-my
+  EDK_TOOLS_PATH      = C:\EDK2\edk2\BaseTools
+  BASE_TOOLS_PATH     = C:\EDK2\edk2\BaseTools
+   EDK_TOOLS_BIN      = C:\EDK2\edk2\BaseTools\Bin\Win32
+       CONF_PATH      = C:\EDK2\edk2\Conf
+  
+  Using EDK2 in-source Basetools
+                 PATH = C:\EDK2\edk2\BaseTools\BinWrappers\WindowsLike;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\\Extensions\Microsoft\IntelliCode\CLI;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\HostX86\x86;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\VC\VCPackages;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\TestWindow;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\bin\Roslyn;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Team Tools\Performance Tools;C:\Program Files (x86)\Microsoft Visual Studio\Shared\Common\VSPerfCollectionTools\vs2019\;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\devinit;C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x86;C:\Program Files (x86)\Windows Kits\10\bin\x86;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\\MSBuild\Current\Bin;C:\Windows\Microsoft.NET\Framework\v4.0.30319;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\;C:\EDK2\edk2\BaseTools\Bin\Win32;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\HostX86\x64;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\HostX86\x86;C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x86;;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\tools;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\ide;C:\Program Files (x86)\HTML Help Workshop;;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin;C:\Windows\Microsoft.NET\Framework\v4.0.30319\;;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Users\tcr020\AppData\Local\Microsoft\WindowsApps;C:\Program Files\sourceforge\ipmiutil;C:\Program Files\sourceforge\ipmiutil;C:\Program Files\dotnet\;C:\Program Files\Git\cmd;C:\IASL;C:\NASM;C:\Users\tcr020\AppData\Local\Programs\Python\Python39;C:\Users\tcr020\AppData\Local\Programs\Python\Python39\Scripts\;C:\openssl-openssl-3.2.0;C:\Users\tcr020\AppData\Local\Programs\Python\Python39\Scripts\;C:\Users\tcr020\AppData\Local\Programs\Python\Python39\;C:\Users\tcr020\AppData\Local\Microsoft\WindowsApps;C:\Users\tcr020\.dotnet\tools;C:\Users\tcr020\AppData\Local\Programs\Microsoft VS Code\bin;;;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\VC\Linux\bin\ConnectionManagerExe
+           PYTHONPATH = C:\EDK2\edk2\BaseTools\Source\Python;
+  
+  
+  !!! WARNING !!! CLANG_BIN environment variable is not set
+  
+  !!! WARNING !!! No CYGWIN_HOME set, gcc build may not be used !!!
+  
+  Build environment: Windows-10-10.0.18363-SP0
+  Build start time: 22:20:56, Jan.07 2024
+  
+  WORKSPACE        = c:\edk2
+  PACKAGES_PATH    = c:\edk2\edk2;c:\edk2\edk2-libc;c:\edk2\edk2-my
+  EDK_TOOLS_PATH   = c:\edk2\edk2\basetools
+  EDK_TOOLS_BIN    = c:\edk2\edk2\basetools\bin\win32
+  CONF_PATH        = c:\edk2\edk2\conf
+  PYTHON_COMMAND   = py -3
+  
+  
+  Processing meta-data .
+  Architecture(s)  = X64
+  Build target     = DEBUG
+  Toolchain        = VS2019
+  
+  Active Platform          = c:\edk2\edk2\MdeModulePkg\MdeModulePkg.dsc
+  Active Module            = c:\edk2\edk2\MdeModulePkg\Application\HelloWorld\HelloWorld.inf
+  ... done!
+  Generating code . done!
+  Generating makefile . done!
+  Building ... c:\edk2\edk2\MdePkg\Library\UefiLib\UefiLib.inf [X64]
+  Building ... c:\edk2\edk2\MdePkg\Library\UefiApplicationEntryPoint\UefiApplicationEntryPoint.inf [X64]
+  Building ... c:\edk2\edk2\MdePkg\Library\UefiDevicePathLib\UefiDevicePathLib.inf [X64]
+  Building ... c:\edk2\edk2\MdePkg\Library\UefiRuntimeServicesTableLib\UefiRuntimeServicesTableLib.inf [X64]
+  Building ... c:\edk2\edk2\MdePkg\Library\UefiMemoryAllocationLib\UefiMemoryAllocationLib.inf [X64]
+  Building ... c:\edk2\edk2\MdePkg\Library\UefiBootServicesTableLib\UefiBootServicesTableLib.inf [X64]
+  Building ... c:\edk2\edk2\MdePkg\Library\UefiDebugLibStdErr\UefiDebugLibStdErr.inf [X64]
+  Building ... c:\edk2\edk2\MdePkg\Library\BasePrintLib\BasePrintLib.inf [X64]
+  Building ... c:\edk2\edk2\MdePkg\Library\BaseDebugPrintErrorLevelLib\BaseDebugPrintErrorLevelLib.inf [X64]
+  Building ... c:\edk2\edk2\MdePkg\Library\BasePcdLibNull\BasePcdLibNull.inf [X64]
+  Building ... c:\edk2\edk2\MdePkg\Library\BaseMemoryLib\BaseMemoryLib.inf [X64]
+  Building ... c:\edk2\edk2\MdePkg\Library\BaseLib\BaseLib.inf [X64]
+  Building ... c:\edk2\edk2\MdePkg\Library\RegisterFilterLibNull\RegisterFilterLibNull.inf [X64]
+  Building ... c:\edk2\edk2\MdeModulePkg\Application\HelloWorld\HelloWorld.inf [X64]
+  
+  - Done -
+  Build end time: 22:21:02, Jan.07 2024
+  Build total time: 00:00:06
+  
