@@ -26,6 +26,7 @@
   AndroidBootImgLib.c
 
 [LibraryClasses]
+  BaseLib
   DebugLib
   FdtLib
   PrintLib
@@ -39,6 +40,12 @@
 [Protocols]
   gAndroidBootImgProtocolGuid
   gEfiLoadedImageProtocolGuid
+  gEfiLoadFile2ProtocolGuid
 
 [Guids]
+  gEfiAcpiTableGuid
   gFdtTableGuid
+
+[Pcd]
+  gEmbeddedTokenSpaceGuid.PcdAndroidBootLoadFile2
+  gEmbeddedTokenSpaceGuid.PcdAndroidKernelCommandLineOverflow

@@ -8,7 +8,6 @@
 #ifndef __UEFI_LIB_INTERNAL_H_
 #define __UEFI_LIB_INTERNAL_H_
 
-
 #include <Uefi.h>
 #include <Protocol/DriverBinding.h>
 #include <Protocol/ComponentName.h>
@@ -19,7 +18,6 @@
 #include <Protocol/DriverDiagnostics2.h>
 #include <Protocol/LoadedImage.h>
 #include <Protocol/GraphicsOutput.h>
-#include <Protocol/UgaDraw.h>
 #include <Protocol/HiiFont.h>
 
 #include <Guid/EventGroup.h>

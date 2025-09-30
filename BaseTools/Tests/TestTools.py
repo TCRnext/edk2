@@ -2,7 +2,7 @@ from __future__ import print_function
 ## @file
 # Utility functions and classes for BaseTools unit tests
 #
-#  Copyright (c) 2008 - 2018, Intel Corporation. All rights reserved.<BR>
+#  Copyright (c) 2008 - 2025, Intel Corporation. All rights reserved.<BR>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -45,7 +45,7 @@ def MakeTheTestSuite(localItems):
 
 def GetBaseToolsPaths():
     if sys.platform in ('win32', 'win64'):
-        return [ os.path.join(BaseToolsDir, 'Bin', sys.platform.title()) ]
+        return [ os.path.join(BaseToolsDir, 'Bin', x) for x in ('Win32', 'Win64') ]
     else:
         uname = os.popen('uname -sm').read().strip()
         for char in (' ', '/'):
@@ -109,6 +109,8 @@ class BaseToolsTest(unittest.TestCase):
         else: logFile = None
 
         if toolName is None: toolName = self.toolName
+        if sys.platform == "win32":
+            toolName += ".exe"
         bin = self.FindToolBin(toolName)
         if logFile is not None:
             logFile = open(os.path.join(self.testDir, logFile), 'w')
@@ -135,7 +137,7 @@ class BaseToolsTest(unittest.TestCase):
         return open(os.path.join(self.testDir, fileName), mode)
 
     def ReadTmpFile(self, fileName):
-        f = open(self.GetTmpFilePath(fileName), 'r')
+        f = open(self.GetTmpFilePath(fileName), 'rb')
         data = f.read()
         f.close()
         return data

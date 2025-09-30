@@ -20,17 +20,19 @@
   is returned.
 
   @param   Pages                 The number of 4 KB pages to allocate.
+  @param   MemoryType            The MemoryType
   @return  A pointer to the allocated buffer or NULL if allocation fails.
 **/
 VOID *
 EFIAPI
-AllocatePages (
-  IN UINTN                                Pages
+PayloadAllocatePages (
+  IN UINTN            Pages,
+  IN EFI_MEMORY_TYPE  MemoryType
   )
 {
-  EFI_PEI_HOB_POINTERS                    Hob;
-  EFI_PHYSICAL_ADDRESS                    Offset;
-  EFI_HOB_HANDOFF_INFO_TABLE              *HobTable;
+  EFI_PEI_HOB_POINTERS        Hob;
+  EFI_PHYSICAL_ADDRESS        Offset;
+  EFI_HOB_HANDOFF_INFO_TABLE  *HobTable;
 
   Hob.Raw  = GetHobList ();
   HobTable = Hob.HandoffInformationTable;
@@ -40,6 +42,54 @@ AllocatePages (
   }
 
   // Make sure allocation address is page alligned.
+  Offset = HobTable->EfiFreeMemoryTop & EFI_PAGE_MASK;
+  if (Offset != 0) {
+    HobTable->EfiFreeMemoryTop -= Offset;
+  }
+
+  //
+  // Check available memory for the allocation
+  //
+  if (HobTable->EfiFreeMemoryTop - ((Pages * EFI_PAGE_SIZE) + sizeof (EFI_HOB_MEMORY_ALLOCATION)) < HobTable->EfiFreeMemoryBottom) {
+    return NULL;
+  }
+
+  HobTable->EfiFreeMemoryTop -= Pages * EFI_PAGE_SIZE;
+  BuildMemoryAllocationHob (HobTable->EfiFreeMemoryTop, Pages * EFI_PAGE_SIZE, MemoryType);
+
+  return (VOID *)(UINTN)HobTable->EfiFreeMemoryTop;
+}
+
+/**
+  Allocates one or more pages of type EfiBootServicesData.
+
+  Allocates the number of pages of MemoryType and returns a pointer to the
+  allocated buffer.  The buffer returned is aligned on a 4KB boundary.
+  If Pages is 0, then NULL is returned.
+  If there is not enough memory availble to satisfy the request, then NULL
+  is returned.
+
+  @param   Pages                 The number of 4 KB pages to allocate.
+  @return  A pointer to the allocated buffer or NULL if allocation fails.
+**/
+VOID *
+EFIAPI
+AllocatePages (
+  IN UINTN  Pages
+  )
+{
+  EFI_PEI_HOB_POINTERS        Hob;
+  EFI_PHYSICAL_ADDRESS        Offset;
+  EFI_HOB_HANDOFF_INFO_TABLE  *HobTable;
+
+  Hob.Raw  = GetHobList ();
+  HobTable = Hob.HandoffInformationTable;
+
+  if (Pages == 0) {
+    return NULL;
+  }
+
+  // Make sure allocation address is page aligned.
   Offset = HobTable->EfiFreeMemoryTop & EFI_PAGE_MASK;
   if (Offset != 0) {
     HobTable->EfiFreeMemoryTop -= Offset;
@@ -102,12 +152,12 @@ FreePages (
 VOID *
 EFIAPI
 AllocateAlignedPages (
-  IN UINTN                    Pages,
-  IN UINTN                    Alignment
+  IN UINTN  Pages,
+  IN UINTN  Alignment
   )
 {
-  VOID                        *Memory;
-  UINTN                       AlignmentMask;
+  VOID   *Memory;
+  UINTN  AlignmentMask;
 
   //
   // Alignment must be a power of two or zero.
@@ -134,9 +184,8 @@ AllocateAlignedPages (
     AlignmentMask = Alignment - 1;
   }
 
-  return (VOID *) (UINTN) (((UINTN) Memory + AlignmentMask) & ~AlignmentMask);
+  return (VOID *)(UINTN)(((UINTN)Memory + AlignmentMask) & ~AlignmentMask);
 }
-
 
 /**
   Allocates a buffer of type EfiBootServicesData.
@@ -156,14 +205,14 @@ AllocatePool (
   IN UINTN  AllocationSize
   )
 {
-  EFI_HOB_MEMORY_POOL      *Hob;
+  EFI_HOB_MEMORY_POOL  *Hob;
 
   if (AllocationSize > 0x4000) {
     // Please use AllocatePages for big allocations
     return NULL;
   }
 
-  Hob = (EFI_HOB_MEMORY_POOL *)CreateHob (EFI_HOB_TYPE_MEMORY_POOL, (UINT16)(sizeof (EFI_HOB_TYPE_MEMORY_POOL) + AllocationSize));
+  Hob = (EFI_HOB_MEMORY_POOL *)CreateHob (EFI_HOB_TYPE_MEMORY_POOL, (UINT16)(sizeof (EFI_HOB_MEMORY_POOL) + AllocationSize));
   return (VOID *)(Hob + 1);
 }
 
@@ -186,7 +235,7 @@ AllocateZeroPool (
   IN UINTN  AllocationSize
   )
 {
-  VOID *Buffer;
+  VOID  *Buffer;
 
   Buffer = AllocatePool (AllocationSize);
   if (Buffer == NULL) {
@@ -197,5 +246,3 @@ AllocateZeroPool (
 
   return Buffer;
 }
-
-

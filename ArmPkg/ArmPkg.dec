@@ -2,7 +2,8 @@
 # ARM processor package.
 #
 # Copyright (c) 2009 - 2010, Apple Inc. All rights reserved.<BR>
-# Copyright (c) 2011 - 2021, ARM Limited. All rights reserved.
+# Copyright (c) 2011 - 2023, ARM Limited. All rights reserved.
+# Copyright (c) 2021, Ampere Computing LLC. All rights reserved.
 #
 #    SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -27,18 +28,9 @@
   Include                        # Root include for the package
 
 [LibraryClasses.common]
-  ##  @libraryclass  Convert Arm instructions to a human readable format.
-  #
-  ArmDisassemblerLib|Include/Library/ArmDisassemblerLib.h
-
   ##  @libraryclass  Provides an interface to Arm generic counters.
   #
   ArmGenericTimerCounterLib|Include/Library/ArmGenericTimerCounterLib.h
-
-  ##  @libraryclass  Provides an interface to initialize a
-  #   Generic Interrupt Controller (GIC).
-  #
-  ArmGicArchLib|Include/Library/ArmGicArchLib.h
 
   ##  @libraryclass  Provides a Generic Interrupt Controller (GIC)
   #   configuration interface.
@@ -49,26 +41,15 @@
   #
   ArmHvcLib|Include/Library/ArmHvcLib.h
 
-  ##  @libraryclass  Provides an interface to Arm registers.
-  #
-  ArmLib|Include/Library/ArmLib.h
-
-  ##  @libraryclass  Provides a Mmu interface.
-  #
-  ArmMmuLib|Include/Library/ArmMmuLib.h
-
   ##  @libraryclass  Provides a Mailbox Transport Layer (MTL) interface
   #   for the System Control and Management Interface (SCMI).
   #
   ArmMtlLib|Include/Library/ArmMtlLib.h
 
-  ##  @libraryclass  Provides a System Monitor Call (SMC) interface.
+  ##  @libraryclass  Provides a Monitor Call interface that will use the
+  #   default conduit (HVC or SMC).
   #
-  ArmSmcLib|Include/Library/ArmSmcLib.h
-
-  ##  @libraryclass  Provides a SuperVisor Call (SVC) interface.
-  #
-  ArmSvcLib|Include/Library/ArmSvcLib.h
+  ArmMonitorLib|Include/Library/ArmMonitorLib.h
 
   ##  @libraryclass  Provides a default exception handler.
   #
@@ -91,12 +72,22 @@
   #
   StandaloneMmMmuLib|Include/Library/StandaloneMmMmuLib.h
 
+  ##  @libraryclass  Provides an interface for a Arm Transfer List.
+  #
+  ArmTransferListLib|Include/Library/ArmTransferListLib.h
+
+  ##  @libraryclass  Defines a set of interfaces for the MM core entrypoint for
+  ##                 AArch64 and ARM.
+  StandaloneMmCoreEntryPoint|Include/Library/ArmStandaloneMmCoreEntryPoint.h
+
 [Guids.common]
   gArmTokenSpaceGuid       = { 0xBB11ECFE, 0x820F, 0x4968, { 0xBB, 0xA6, 0xF7, 0x6A, 0xFE, 0x30, 0x25, 0x96 } }
 
   ## ARM MPCore table
   # Include/Guid/ArmMpCoreInfo.h
   gArmMpCoreInfoGuid = { 0xa4ee0728, 0xe5d7, 0x4ac5,  {0xb2, 0x1e, 0x65, 0x8e, 0xd8, 0x57, 0xe8, 0x34} }
+
+  gArmTransferListHobGuid = { 0xebe7bae8, 0xfe18, 0x43c5, { 0xbf, 0x3f, 0xf2, 0xb1, 0xaf, 0xb2, 0xdf, 0xb8 } }
 
 [Protocols.common]
   ## Arm System Control and Management Interface(SCMI) Base protocol
@@ -112,46 +103,24 @@
   ## ArmPkg/Include/Protocol/ArmScmiPerformanceProtocol.h
   gArmScmiPerformanceProtocolGuid = { 0x9b8ba84, 0x3dd3, 0x49a6, { 0xa0, 0x5a, 0x31, 0x34, 0xa5, 0xf0, 0x7b, 0xad } }
 
+  gEdkiiPiMmCpuDriverEpProtocolGuid          = { 0x6ecbd5a1, 0xc0f8, 0x4702, { 0x83, 0x01, 0x4f, 0xc2, 0xc5, 0x47, 0x0a, 0x51 }}
+
 [Ppis]
   ## Include/Ppi/ArmMpCoreInfo.h
   gArmMpCoreInfoPpiGuid = { 0x6847cc74, 0xe9ec, 0x4f8f, {0xa2, 0x9d, 0xab, 0x44, 0xe7, 0x54, 0xa8, 0xfc} }
+  gArmTransferListPpiGuid = { 0x6d2e9da1, 0x9414, 0x41c3, {0x86, 0xbe, 0xf9, 0x16, 0x9f, 0xb4, 0x76, 0x38} }
 
 [PcdsFeatureFlag.common]
   gArmTokenSpaceGuid.PcdCpuDxeProduceDebugSupport|FALSE|BOOLEAN|0x00000001
 
-  # On ARM Architecture with the Security Extension, the address for the
-  # Vector Table can be mapped anywhere in the memory map. It means we can
-  # point the Exception Vector Table to its location in CpuDxe.
-  # By default we copy the Vector Table at  PcdGet64(PcdCpuVectorBaseAddress)
-  gArmTokenSpaceGuid.PcdRelocateVectorTable|TRUE|BOOLEAN|0x00000022
-  # Set this PCD to TRUE if the Exception Vector is changed to add debugger support before
-  # it has been configured by the CPU DXE
-  gArmTokenSpaceGuid.PcdDebuggerExceptionSupport|FALSE|BOOLEAN|0x00000032
-
-  # Define if the GICv3 controller should use the GICv2 legacy
-  gArmTokenSpaceGuid.PcdArmGicV3WithV2Legacy|FALSE|BOOLEAN|0x00000042
-
-[PcdsFeatureFlag.ARM]
-  # Whether to map normal memory as non-shareable. FALSE is the safe choice, but
-  # TRUE may be appropriate to fix performance problems if you don't care about
-  # hardware coherency (i.e., no virtualization or cache coherent DMA)
-  gArmTokenSpaceGuid.PcdNormalMemoryNonshareableOverride|FALSE|BOOLEAN|0x00000043
-
-[PcdsFeatureFlag.AARCH64]
-  ## Used to select method for requesting services from S-EL1.<BR><BR>
-  #   TRUE  - Selects FF-A calls for communication between S-EL0 and SPMC.<BR>
-  #   FALSE - Selects SVC calls for communication between S-EL0 and SPMC.<BR>
-  # @Prompt Enable FF-A support.
-  gArmTokenSpaceGuid.PcdFfaEnable|FALSE|BOOLEAN|0x0000005B
+  # Whether to remap all unused memory NX before installing the CPU arch
+  # protocol driver. This is needed on platforms that map all DRAM with RWX
+  # attributes initially, and can be disabled otherwise.
+  gArmTokenSpaceGuid.PcdRemapUnusedMemoryNx|TRUE|BOOLEAN|0x00000048
 
 [PcdsFixedAtBuild.common]
   gArmTokenSpaceGuid.PcdTrustzoneSupport|FALSE|BOOLEAN|0x00000006
 
-  # This PCD should be a FeaturePcd. But we used this PCD as an '#if' in an ASM file.
-  # Using a FeaturePcd make a '(BOOLEAN) casting for its value which is not understood by the preprocessor.
-  gArmTokenSpaceGuid.PcdVFPEnabled|0|UINT32|0x00000024
-
-  gArmTokenSpaceGuid.PcdCpuVectorBaseAddress|0xffff0000|UINT64|0x00000004
   gArmTokenSpaceGuid.PcdCpuResetAddress|0x00000000|UINT32|0x00000005
 
   #
@@ -169,6 +138,11 @@
   gArmTokenSpaceGuid.PcdHypFdSize|0|UINT32|0x0000003B
   gArmTokenSpaceGuid.PcdHypFvBaseAddress|0|UINT32|0x0000003C
   gArmTokenSpaceGuid.PcdHypFvSize|0|UINT32|0x0000003D
+
+  #
+  # ARM StanaloneMm Stack size.
+  #
+  gArmTokenSpaceGuid.PcdStMmStackSize|0x2000|UINT32|0x0000005D
 
   # Use ClusterId + CoreId to identify the PrimaryCore
   gArmTokenSpaceGuid.PcdArmPrimaryCoreMask|0xF03|UINT32|0x00000031
@@ -208,11 +182,27 @@
   #
   gArmTokenSpaceGuid.PcdArmDmaDeviceOffset|0x0|UINT64|0x0000044
 
+  #
+  # Boot the Uefi Shell instead of UiApp when no valid boot option is found.
+  # This is useful in CI environment so that startup.nsh can be launched.
+  # The default value is FALSE.
+  #
+  gArmTokenSpaceGuid.PcdUefiShellDefaultBootEnable|FALSE|BOOLEAN|0x0000052
+
+  ## Define the conduit to use for monitor calls.
+  # Default PcdMonitorConduitHvc = FALSE, conduit = SMC
+  # If PcdMonitorConduitHvc = TRUE, conduit = HVC
+  gArmTokenSpaceGuid.PcdMonitorConduitHvc|FALSE|BOOLEAN|0x00000047
+
 [PcdsFixedAtBuild.common, PcdsPatchableInModule.common]
   gArmTokenSpaceGuid.PcdFdBaseAddress|0|UINT64|0x0000002B
   gArmTokenSpaceGuid.PcdFvBaseAddress|0|UINT64|0x0000002D
 
 [PcdsFixedAtBuild.ARM]
+  # This PCD should be a FeaturePcd. But we used this PCD as an '#if' in an ASM file.
+  # Using a FeaturePcd make a '(BOOLEAN) casting for its value which is not understood by the preprocessor.
+  gArmTokenSpaceGuid.PcdVFPEnabled|0|UINT32|0x00000024
+
   #
   # ARM Security Extension
   #
@@ -293,16 +283,12 @@
   gArmTokenSpaceGuid.PcdEmbeddedControllerFirmwareRelease|0xFFFF|UINT16|0x30000059
 
 [PcdsFixedAtBuild.common, PcdsDynamic.common]
-  #
-  # ARM Architectural Timer
-  #
-  gArmTokenSpaceGuid.PcdArmArchTimerFreqInHz|0|UINT32|0x00000034
-
   # ARM Architectural Timer Interrupt(GIC PPI) numbers
   gArmTokenSpaceGuid.PcdArmArchTimerSecIntrNum|29|UINT32|0x00000035
   gArmTokenSpaceGuid.PcdArmArchTimerIntrNum|30|UINT32|0x00000036
   gArmTokenSpaceGuid.PcdArmArchTimerHypIntrNum|26|UINT32|0x00000040
   gArmTokenSpaceGuid.PcdArmArchTimerVirtIntrNum|27|UINT32|0x00000041
+  gArmTokenSpaceGuid.PcdArmArchTimerHypVirtIntrNum|28|UINT32|0x0000004A
 
   #
   # ARM Generic Watchdog
@@ -320,6 +306,7 @@
   gArmTokenSpaceGuid.PcdGicRedistributorsBase|0|UINT64|0x0000000E
   gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase|0|UINT64|0x0000000D
   gArmTokenSpaceGuid.PcdGicSgiIntId|0|UINT32|0x00000025
+  gArmTokenSpaceGuid.PcdGicIrsConfigFrameBase|0|UINT64|0x00000064
 
   #
   # Bases, sizes and translation offsets of IO and MMIO spaces, respectively.
@@ -337,9 +324,9 @@
   #   UINT64 Mmio32CpuBase; // mapping target in 64-bit cpu-physical space
   #   UINT64 Mmio64CpuBase; // mapping target in 64-bit cpu-physical space
   #
-  #   PcdPciIoTranslation     = IoCpuBase     - PcdPciIoBase;
-  #   PcdPciMmio32Translation = Mmio32CpuBase - (UINT64)PcdPciMmio32Base;
-  #   PcdPciMmio64Translation = Mmio64CpuBase - PcdPciMmio64Base;
+  #   gEfiMdePkgTokenSpaceGuid.PcdPciIoTranslation = IoCpuBase - PcdPciIoBase;
+  #   gEfiMdePkgTokenSpaceGuid.PcdPciMmio32Translation = Mmio32CpuBase - (UINT64)PcdPciMmio32Base;
+  #   gEfiMdePkgTokenSpaceGuid.PcdPciMmio64Translation = Mmio64CpuBase - PcdPciMmio64Base;
   #
   # because (a) the target address space (ie. the cpu-physical space) is
   # 64-bit, and (b) the translation values are meant as offsets for *modular*
@@ -356,11 +343,11 @@
   #   UINT64 TranslatedMmio64Address;   // output parameter
   #
   #   TranslatedIoAddress     = UntranslatedIoAddress +
-  #                             PcdPciIoTranslation;
+  #                             gEfiMdePkgTokenSpaceGuid.PcdPciIoTranslation;
   #   TranslatedMmio32Address = (UINT64)UntranslatedMmio32Address +
-  #                             PcdPciMmio32Translation;
+  #                             gEfiMdePkgTokenSpaceGuid.PcdPciMmio32Translation;
   #   TranslatedMmio64Address = UntranslatedMmio64Address +
-  #                             PcdPciMmio64Translation;
+  #                             gEfiMdePkgTokenSpaceGuid.PcdPciMmio64Translation;
   #
   #  The modular arithmetic performed in UINT64 ensures that the translation
   #  works correctly regardless of the relation between IoCpuBase and
@@ -369,16 +356,20 @@
   #
   gArmTokenSpaceGuid.PcdPciIoBase|0x0|UINT64|0x00000050
   gArmTokenSpaceGuid.PcdPciIoSize|0x0|UINT64|0x00000051
-  gArmTokenSpaceGuid.PcdPciIoTranslation|0x0|UINT64|0x00000052
   gArmTokenSpaceGuid.PcdPciMmio32Base|0x0|UINT32|0x00000053
   gArmTokenSpaceGuid.PcdPciMmio32Size|0x0|UINT32|0x00000054
-  gArmTokenSpaceGuid.PcdPciMmio32Translation|0x0|UINT64|0x00000055
   gArmTokenSpaceGuid.PcdPciMmio64Base|0x0|UINT64|0x00000056
   gArmTokenSpaceGuid.PcdPciMmio64Size|0x0|UINT64|0x00000057
-  gArmTokenSpaceGuid.PcdPciMmio64Translation|0x0|UINT64|0x00000058
 
   #
   # Inclusive range of allowed PCI buses.
   #
   gArmTokenSpaceGuid.PcdPciBusMin|0x0|UINT32|0x00000059
   gArmTokenSpaceGuid.PcdPciBusMax|0x0|UINT32|0x0000005A
+
+[PcdsDynamicEx]
+  #
+  # This dynamic PCD hold the GUID of a firmware FFS which contains
+  # the LinuxBoot payload.
+  #
+  gArmTokenSpaceGuid.PcdLinuxBootFileGuid|{0x0}|VOID*|0x0000005C

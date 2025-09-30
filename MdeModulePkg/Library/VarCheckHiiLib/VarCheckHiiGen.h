@@ -1,7 +1,7 @@
 /** @file
   Include file for Var Check Hii bin generation.
 
-Copyright (c) 2015, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2024, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -10,6 +10,8 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #define _VAR_CHECK_HII_GEN_H_
 
 #include "VarCheckHii.h"
+extern VAR_CHECK_HII_VARIABLE_HEADER  *mVarCheckHiiBin;
+extern UINTN                          mVarCheckHiiBinSize;
 
 /**
   Dump Hii Package.
@@ -19,7 +21,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 VOID
 DumpHiiPackage (
-  IN VOID       *HiiPackage
+  IN VOID  *HiiPackage
   );
 
 /**
@@ -31,8 +33,8 @@ DumpHiiPackage (
 **/
 VOID
 DumpHiiDatabase (
-  IN VOID       *HiiDatabase,
-  IN UINTN      HiiDatabaseSize
+  IN VOID   *HiiDatabase,
+  IN UINTN  HiiDatabaseSize
   );
 
 /**
@@ -50,7 +52,7 @@ DumpHiiDatabase (
 **/
 VOID *
 InternalVarCheckAllocateZeroPool (
-  IN UINTN            AllocationSize
+  IN UINTN  AllocationSize
   );
 
 /**
@@ -70,7 +72,7 @@ InternalVarCheckAllocateZeroPool (
 VOID
 EFIAPI
 InternalVarCheckFreePool (
-  IN VOID   *Buffer
+  IN VOID  *Buffer
   );
 
 /**
@@ -82,8 +84,8 @@ InternalVarCheckFreePool (
 **/
 VOID
 VarCheckParseHiiPackage (
-  IN VOID       *HiiPackage,
-  IN BOOLEAN    FromFv
+  IN VOID     *HiiPackage,
+  IN BOOLEAN  FromFv
   );
 
 /**
@@ -95,8 +97,8 @@ VarCheckParseHiiPackage (
 **/
 VOID
 VarCheckParseHiiDatabase (
-  IN VOID       *HiiDatabase,
-  IN UINTN      HiiDatabaseSize
+  IN VOID   *HiiDatabase,
+  IN UINTN  HiiDatabaseSize
   );
 
 /**

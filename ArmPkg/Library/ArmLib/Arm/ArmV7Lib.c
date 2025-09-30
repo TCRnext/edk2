@@ -13,65 +13,10 @@
 #include <Library/ArmLib.h>
 #include <Library/DebugLib.h>
 
-#include <Chipset/ArmV7.h>
+#include <Arm/AArch32.h>
 
 #include "ArmV7Lib.h"
 #include "ArmLibPrivate.h"
-
-VOID
-ArmV7DataCacheOperation (
-  IN  ARM_V7_CACHE_OPERATION  DataCacheOperation
-  )
-{
-  UINTN     SavedInterruptState;
-
-  SavedInterruptState = ArmGetInterruptState ();
-  ArmDisableInterrupts ();
-
-  ArmV7AllDataCachesOperation (DataCacheOperation);
-
-  ArmDataSynchronizationBarrier ();
-
-  if (SavedInterruptState) {
-    ArmEnableInterrupts ();
-  }
-}
-
-VOID
-EFIAPI
-ArmInvalidateDataCache (
-  VOID
-  )
-{
-  ASSERT (!ArmMmuEnabled ());
-
-  ArmDataSynchronizationBarrier ();
-  ArmV7DataCacheOperation (ArmInvalidateDataCacheEntryBySetWay);
-}
-
-VOID
-EFIAPI
-ArmCleanInvalidateDataCache (
-  VOID
-  )
-{
-  ASSERT (!ArmMmuEnabled ());
-
-  ArmDataSynchronizationBarrier ();
-  ArmV7DataCacheOperation (ArmCleanInvalidateDataCacheEntryBySetWay);
-}
-
-VOID
-EFIAPI
-ArmCleanDataCache (
-  VOID
-  )
-{
-  ASSERT (!ArmMmuEnabled ());
-
-  ArmDataSynchronizationBarrier ();
-  ArmV7DataCacheOperation (ArmCleanDataCacheEntryBySetWay);
-}
 
 /**
   Check whether the CPU supports the GIC system register interface (any version)
@@ -86,6 +31,21 @@ ArmHasGicSystemRegisters (
   )
 {
   return ((ArmReadIdPfr1 () & ARM_PFR1_GIC) != 0);
+}
+
+/**
+  Check whether the CPU supports the GICv5 system register interface
+
+  @return   Whether GICv5 System Register Interface is supported
+**/
+BOOLEAN
+EFIAPI
+ArmHasGicV5SystemRegisters (
+  VOID
+  )
+{
+  // GICv5 not supported in AArch32.
+  return FALSE;
 }
 
 /**
@@ -114,7 +74,7 @@ ArmHasCcidx (
   VOID
   )
 {
-  UINTN Mmfr4;
+  UINTN  Mmfr4;
 
   Mmfr4 = ArmReadIdMmfr4 ();
   return (((Mmfr4 >> 24) & 0xF) == 1) ? TRUE : FALSE;

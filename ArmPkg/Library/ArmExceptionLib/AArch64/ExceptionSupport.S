@@ -7,9 +7,9 @@
 //
 //------------------------------------------------------------------------------
 
-#include <Chipset/AArch64.h>
+#include <AArch64/AArch64.h>
 #include <Library/PcdLib.h>
-#include <AsmMacroIoLibV8.h>
+#include <AsmMacroLib.h>
 #include <Protocol/DebugSupport.h> // for exception type definitions
 
 /*
@@ -94,7 +94,6 @@
 
 GCC_ASM_EXPORT(ExceptionHandlersEnd)
 GCC_ASM_EXPORT(CommonCExceptionHandler)
-GCC_ASM_EXPORT(RegisterEl0Stack)
 
 .text
 
@@ -110,12 +109,7 @@ GCC_ASM_EXPORT(RegisterEl0Stack)
 // exception vector initialization method is used.
 //
 
-#if defined(ARM_RELOCATE_VECTORS)
-GCC_ASM_EXPORT(ExceptionHandlersStart)
-ASM_PFX(ExceptionHandlersStart):
-#else
 VECTOR_BASE(ExceptionHandlersStart)
-#endif
 
   .macro  ExceptionEntry, val, sp=SPx
   //
@@ -169,13 +163,7 @@ VECTOR_BASE(ExceptionHandlersStart)
   mov       x0, #\val
 
   // Jump to our general handler to deal with all the common parts and process the exception.
-#if defined(ARM_RELOCATE_VECTORS)
-  ldr       x1, =ASM_PFX(CommonExceptionEntry)
-  br        x1
-  .ltorg
-#else
   b         ASM_PFX(CommonExceptionEntry)
-#endif
   .endm
 
 //
@@ -261,7 +249,7 @@ ASM_PFX(ExceptionHandlersEnd):
 
 ASM_PFX(CommonExceptionEntry):
 
-  EL1_OR_EL2_OR_EL3(x1)
+  EL1_OR_EL2(x1)
 1:mrs      x2, elr_el1   // Exception Link Register
   mrs      x3, spsr_el1  // Saved Processor Status Register 32bit
   mrs      x5, esr_el1   // EL1 Exception syndrome register 32bit
@@ -272,12 +260,6 @@ ASM_PFX(CommonExceptionEntry):
   mrs      x3, spsr_el2  // Saved Processor Status Register 32bit
   mrs      x5, esr_el2   // EL2 Exception syndrome register 32bit
   mrs      x6, far_el2   // EL2 Fault Address Register
-  b        4f
-
-3:mrs      x2, elr_el3   // Exception Link Register
-  mrs      x3, spsr_el3  // Saved Processor Status Register 32bit
-  mrs      x5, esr_el3   // EL3 Exception syndrome register 32bit
-  mrs      x6, far_el3   // EL3 Fault Address Register
 
 4:mrs      x4, fpsr      // Floating point Status Register  32bit
 
@@ -366,15 +348,12 @@ ASM_PFX(CommonExceptionEntry):
   msr   daifset, #3
   isb
 
-  EL1_OR_EL2_OR_EL3(x28)
+  EL1_OR_EL2(x28)
 1:msr      elr_el1, x29  // Exception Link Register
   msr      spsr_el1, x30 // Saved Processor Status Register 32bit
   b        4f
 2:msr      elr_el2, x29  // Exception Link Register
   msr      spsr_el2, x30 // Saved Processor Status Register 32bit
-  b        4f
-3:msr      elr_el3, x29  // Exception Link Register
-  msr      spsr_el3, x30 // Saved Processor Status Register 32bit
 4:
 
   // pop remaining GP regs and return from exception.
@@ -387,6 +366,6 @@ ASM_PFX(CommonExceptionEntry):
 
   eret
 
-ASM_PFX(RegisterEl0Stack):
+ASM_FUNC(RegisterEl0Stack)
   msr     sp_el0, x0
   ret

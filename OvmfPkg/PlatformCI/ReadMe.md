@@ -6,7 +6,7 @@ to use the same Pytools based build infrastructure locally.
 ## Supported Configuration Details
 
 This solution for building and running OvmfPkg has only been validated with Windows 10
-with VS2019 and Ubuntu 18.04 with GCC5 toolchain. Four different firmware builds are
+with VS2022 and Ubuntu 18.04 with GCC5 toolchain. Four different firmware builds are
 supported and are described below.
 
 | Configuration name      | Architectures      | DSC File            |Additional Flags |
@@ -14,11 +14,12 @@ supported and are described below.
 | IA32                    | IA32               | OvmfPkgIa32.dsc     | None            |
 | X64                     | X64                | OvmfPkgIa64.dsc     | None            |
 | IA32 X64                | PEI-IA32 DXE-X64   | OvmfPkgIa32X64.dsc  | None            |
-| IA32 X64 Full           | PEI-IA32 DXE-X64   | OvmfPkgIa32X64.dsc  | SECURE_BOOT_ENABLE=1 SMM_REQUIRE=1 TPM_ENABLE=1 TPM_CONFIG_ENABLE=1 NETWORK_TLS_ENABLE=1 NETWORK_IP6_ENABLE=1 NETWORK_HTTP_BOOT_ENABLE=1 |
+| IA32 X64 Full           | PEI-IA32 DXE-X64   | OvmfPkgIa32X64.dsc  | SECURE_BOOT_ENABLE=1 SMM_REQUIRE=1 TPM1_ENABLE=1 TPM2_ENABLE=1 NETWORK_TLS_ENABLE=1 NETWORK_IP6_ENABLE=1 NETWORK_HTTP_BOOT_ENABLE=1 |
 
 ## EDK2 Developer environment
 
-- [Python 3.8.x - Download & Install](https://www.python.org/downloads/)
+![Minimum Python Version](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftianocore%2Fedk2-pytool-extensions%2Frefs%2Fheads%2Fmaster%2Fpyproject.toml&query=%24.%5B'requires-python'%5D&style=for-the-badge&logo=python&logoColor=ffd343&label=Minimum%20Python%20Version%20for%20CI&color=3776ab&link=https%3A%2F%2Fwww.python.org%2Fdownloads%2F)
+
 - [GIT - Download & Install](https://git-scm.com/download/)
 - [QEMU - Download, Install, and add to your path](https://www.qemu.org/download/)
 - [Edk2 Source](https://github.com/tianocore/edk2)
@@ -30,6 +31,9 @@ the required cross-compiler toolchains are **not** required, this is handled by 
 Pytools build system.
 
 ## Building with Pytools for OvmfPkg
+
+If you are unfamiliar with Pytools, it is recommended to first read through
+the generic set of edk2 [Build Instructions](https://github.com/tianocore/tianocore.github.io/wiki/Build-Instructions).
 
 1. [Optional] Create a Python Virtual Environment - generally once per workspace
 

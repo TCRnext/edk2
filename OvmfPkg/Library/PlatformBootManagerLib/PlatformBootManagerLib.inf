@@ -56,11 +56,15 @@
   PlatformBmPrintScLib
   Tcg2PhysicalPresenceLib
   XenPlatformLib
+  QemuFwCfgSimpleParserLib
+  PlatformBootManagerCommonLib
 
 [Pcd]
   gUefiOvmfPkgTokenSpaceGuid.PcdEmuVariableEvent
   gUefiOvmfPkgTokenSpaceGuid.PcdOvmfFlashVariablesEnable
   gUefiOvmfPkgTokenSpaceGuid.PcdOvmfHostBridgePciDevId
+  gUefiOvmfPkgTokenSpaceGuid.PcdBootRestrictToFirmware
+  gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiS3Enable
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate         ## CONSUMES
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultDataBits         ## CONSUMES
@@ -73,6 +77,7 @@
 [Protocols]
   gEfiDecompressProtocolGuid
   gEfiPciRootBridgeIoProtocolGuid
+  gVirtioDeviceProtocolGuid
   gEfiS3SaveStateProtocolGuid                   # PROTOCOL SOMETIMES_CONSUMED
   gEfiDxeSmmReadyToLockProtocolGuid             # PROTOCOL SOMETIMES_PRODUCED
   gEfiLoadedImageProtocolGuid                   # PROTOCOL SOMETIMES_PRODUCED
@@ -83,3 +88,5 @@
   gEfiGlobalVariableGuid
   gRootBridgesConnectedEventGroupGuid
   gUefiShellFileGuid
+  gGrubFileGuid
+  gUiAppFileGuid

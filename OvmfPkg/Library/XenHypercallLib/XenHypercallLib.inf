@@ -13,11 +13,6 @@
   MODULE_TYPE                    = BASE
   VERSION_STRING                 = 1.0
   CONSTRUCTOR                    = XenHypercallLibConstruct
-
-[Defines.IA32, Defines.X64]
-  LIBRARY_CLASS                  = XenHypercallLib|PEIM DXE_DRIVER UEFI_DRIVER
-
-[Defines.ARM, Defines.AARCH64]
   LIBRARY_CLASS                  = XenHypercallLib
 
 #
@@ -42,7 +37,7 @@
   Arm/Hypercall.S
 
 [Sources.AARCH64]
-  Aarch64/Hypercall.S
+  AArch64/Hypercall.S
 
 [Sources]
   XenHypercall.c
@@ -52,12 +47,10 @@
   OvmfPkg/OvmfPkg.dec
 
 [LibraryClasses.IA32, LibraryClasses.X64]
+  CpuLib
   BaseLib
   HobLib
   DebugLib
 
 [Guids.IA32, Guids.X64]
   gEfiXenInfoGuid
-
-[BuildOptions.ARM]
-  RVCT:*_*_ARM_PLATFORM_FLAGS == --cpu Cortex-A15

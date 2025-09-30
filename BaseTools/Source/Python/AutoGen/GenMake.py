@@ -2,7 +2,7 @@
 # Create makefile for MS nmake and GNU make
 #
 # Copyright (c) 2007 - 2021, Intel Corporation. All rights reserved.<BR>
-# Copyright (c) 2020, ARM Limited. All rights reserved.<BR>
+# Copyright (c) 2020 - 2021, Arm Limited. All rights reserved.<BR>
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
 
@@ -14,6 +14,7 @@ import sys
 import string
 import re
 import os.path as path
+from Common import EdkLogger
 from Common.LongFilePathSupport import OpenLongFilePath as open
 from Common.MultipleWorkspace import MultipleWorkspace as mws
 from Common.BuildToolError import *
@@ -28,7 +29,7 @@ from Common.DataType import TAB_COMPILER_MSFT
 gIncludePattern = re.compile(r"^[ \t]*[#%]?[ \t]*include(?:[ \t]*(?:\\(?:\r\n|\r|\n))*[ \t]*)*(?:\(?[\"<]?[ \t]*)([-\w.\\/() \t]+)(?:[ \t]*[\">]?\)?)", re.MULTILINE | re.UNICODE | re.IGNORECASE)
 
 ## Regular expression for matching macro used in header file inclusion
-gMacroPattern = re.compile("([_A-Z][_A-Z0-9]*)[ \t]*\((.+)\)", re.UNICODE)
+gMacroPattern = re.compile("([_A-Z][_A-Z0-9]*)[ \t]*\\((.+)\\)", re.UNICODE)
 
 gIsFileMap = {}
 
@@ -120,7 +121,7 @@ class BuildFile(object):
         },
 
         POSIX_PLATFORM : {
-            "CP"    :   "cp -f",
+            "CP"    :   "cp -p -f",
             "MV"    :   "mv -f",
             "RM"    :   "rm -f",
             "MD"    :   "mkdir -p",
@@ -166,7 +167,7 @@ class BuildFile(object):
         GMAKE_FILETYPE :   "include"
     }
 
-    _INC_FLAG_ = {TAB_COMPILER_MSFT : "/I", "GCC" : "-I", "INTEL" : "-I", "RVCT" : "-I", "NASM" : "-I"}
+    _INC_FLAG_ = {TAB_COMPILER_MSFT : "/I", "GCC" : "-I", "INTEL" : "-I", "NASM" : "-I"}
 
     ## Constructor of BuildFile
     #
@@ -177,11 +178,11 @@ class BuildFile(object):
 
         MakePath = AutoGenObject.BuildOption.get('MAKE', {}).get('PATH')
         if not MakePath:
-            self._FileType = ""
-        elif "nmake" in MakePath:
+            MakePath = AutoGenObject.ToolDefinition.get('MAKE', {}).get('PATH')
+        if "nmake" in MakePath:
             self._FileType = NMAKE_FILETYPE
         else:
-            self._FileType = "gmake"
+            self._FileType = GMAKE_FILETYPE
 
         if sys.platform == "win32":
             self._Platform = WIN32_PLATFORM
@@ -446,19 +447,14 @@ cleanlib:
         self.ResultFileList = []
         self.IntermediateDirectoryList = ["$(DEBUG_DIR)", "$(OUTPUT_DIR)"]
 
-        self.FileBuildTargetList = []       # [(src, target string)]
         self.BuildTargetList = []           # [target string]
-        self.PendingBuildTargetList = []    # [FileBuildRule objects]
         self.CommonFileDependency = []
         self.FileListMacros = {}
         self.ListFileMacros = {}
         self.ObjTargetDict = OrderedDict()
         self.FileCache = {}
-        self.LibraryBuildCommandList = []
-        self.LibraryFileList = []
         self.LibraryMakefileList = []
         self.LibraryBuildDirectoryList = []
-        self.SystemLibraryList = []
         self.Macros = OrderedDict()
         self.Macros["OUTPUT_DIR"      ] = self._AutoGenObject.Macros["OUTPUT_DIR"]
         self.Macros["DEBUG_DIR"       ] = self._AutoGenObject.Macros["DEBUG_DIR"]
@@ -898,9 +894,20 @@ cleanlib:
                                 break
 
                         if self._AutoGenObject.ToolChainFamily == 'GCC':
-                            RespDict[Key] = Value.replace('\\', '/')
-                        else:
-                            RespDict[Key] = Value
+                            #
+                            # Replace '\' with '/' in the response file.
+                            # Skip content within "" or \"\"
+                            #
+                            ValueList = re.split(r'("|\\"|\s+)', Value)
+                            Skip = False
+                            for i, v in enumerate(ValueList):
+                                if v in ('"', '\\"'):
+                                    Skip = not Skip
+                                elif not Skip:
+                                    ValueList[i] = v.replace('\\', '/')
+                            Value = ''.join(ValueList)
+                        RespDict[Key] = Value
+
                         for Target in BuildTargets:
                             for i, SingleCommand in enumerate(BuildTargets[Target].Commands):
                                 if FlagDict[Flag]['Macro'] in SingleCommand:
@@ -1110,7 +1117,8 @@ cleanlib:
                         CmdTargetDict[CmdSign].append(SingleCommandList[-1])
                     Index = CommandList.index(Item)
                     CommandList.pop(Index)
-                    if SingleCommandList[-1].endswith("%s%s.c" % (TAB_SLASH, CmdSumDict[CmdSign[3:].rsplit(TAB_SLASH, 1)[0]])):
+                    BaseName = SingleCommandList[-1].rsplit('.',1)[0]
+                    if BaseName.endswith("%s%s" % (TAB_SLASH, CmdSumDict[CmdSign[3:].rsplit(TAB_SLASH, 1)[0]])):
                         Cpplist = CmdCppDict[T.Target.SubDir]
                         Cpplist.insert(0, '$(OBJLIST_%d): ' % list(self.ObjTargetDict.keys()).index(T.Target.SubDir))
                         source_files = CmdTargetDict[CmdSign][1:]
@@ -1143,21 +1151,6 @@ cleanlib:
         for LibraryAutoGen in self._AutoGenObject.LibraryAutoGenList:
             if not LibraryAutoGen.IsBinaryModule:
                 self.LibraryBuildDirectoryList.append(self.PlaceMacro(LibraryAutoGen.BuildDir, self.Macros))
-
-    ## Return a list containing source file's dependencies
-    #
-    #   @param      FileList        The list of source files
-    #   @param      ForceInculeList The list of files which will be included forcely
-    #   @param      SearchPathList  The list of search path
-    #
-    #   @retval     dict            The mapping between source file path and its dependencies
-    #
-    def GetFileDependency(self, FileList, ForceInculeList, SearchPathList):
-        Dependency = {}
-        for F in FileList:
-            Dependency[F] = GetDependencyList(self._AutoGenObject, self.FileCache, F, ForceInculeList, SearchPathList)
-        return Dependency
-
 
 ## CustomMakefile class
 #
@@ -1450,7 +1443,6 @@ cleanlib:
     #
     def __init__(self, PlatformAutoGen):
         BuildFile.__init__(self, PlatformAutoGen)
-        self.ModuleBuildCommandList = []
         self.ModuleMakefileList = []
         self.IntermediateDirectoryList = []
         self.ModuleBuildDirectoryList = []

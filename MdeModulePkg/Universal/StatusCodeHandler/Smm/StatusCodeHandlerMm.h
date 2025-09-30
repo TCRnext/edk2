@@ -30,7 +30,7 @@
 //
 // Define the maximum message length
 //
-#define MAX_DEBUG_MESSAGE_LENGTH 0x100
+#define MAX_DEBUG_MESSAGE_LENGTH  0x100
 
 extern RUNTIME_MEMORY_STATUSCODE_HEADER  *mMmMemoryStatusCodeTable;
 
@@ -44,7 +44,6 @@ EFI_STATUS
 EfiSerialStatusCodeInitializeWorker (
   VOID
   );
-
 
 /**
   Convert status code value and extended data to readable ASCII string, send string to serial I/O device.
@@ -68,11 +67,11 @@ EfiSerialStatusCodeInitializeWorker (
 EFI_STATUS
 EFIAPI
 SerialStatusCodeReportWorker (
-  IN EFI_STATUS_CODE_TYPE     CodeType,
-  IN EFI_STATUS_CODE_VALUE    Value,
-  IN UINT32                   Instance,
-  IN EFI_GUID                 *CallerId,
-  IN EFI_STATUS_CODE_DATA     *Data OPTIONAL
+  IN EFI_STATUS_CODE_TYPE   CodeType,
+  IN EFI_STATUS_CODE_VALUE  Value,
+  IN UINT32                 Instance,
+  IN EFI_GUID               *CallerId,
+  IN EFI_STATUS_CODE_DATA   *Data OPTIONAL
   );
 
 /**
@@ -107,11 +106,11 @@ MemoryStatusCodeInitializeWorker (
 EFI_STATUS
 EFIAPI
 MemoryStatusCodeReportWorker (
-  IN EFI_STATUS_CODE_TYPE               CodeType,
-  IN EFI_STATUS_CODE_VALUE              Value,
-  IN UINT32                             Instance,
-  IN EFI_GUID                           *CallerId,
-  IN EFI_STATUS_CODE_DATA               *Data OPTIONAL
+  IN EFI_STATUS_CODE_TYPE   CodeType,
+  IN EFI_STATUS_CODE_VALUE  Value,
+  IN UINT32                 Instance,
+  IN EFI_GUID               *CallerId,
+  IN EFI_STATUS_CODE_DATA   *Data OPTIONAL
   );
 
 /**
@@ -124,6 +123,20 @@ MemoryStatusCodeReportWorker (
 **/
 EFI_STATUS
 StatusCodeHandlerCommonEntry (
+  VOID
+  );
+
+/**
+  Check if the status code is using serial port.
+
+  This function determines whether the status code reporting mechanism
+  is configured to use the serial port.
+
+  @retval TRUE   Status code is using the serial port.
+  @retval FALSE  Status code is not using the serial port.
+**/
+BOOLEAN
+IsStatusCodeUsingSerialPort (
   VOID
   );
 

@@ -1,7 +1,7 @@
 ## @file
 # This file is used to parse meta files
 #
-# Copyright (c) 2008 - 2018, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2008 - 2025, Intel Corporation. All rights reserved.<BR>
 # (C) Copyright 2015-2018 Hewlett Packard Enterprise Development LP<BR>
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -158,7 +158,6 @@ class MetaFileParser(object):
         self._Arch = Arch
         self._FileType = FileType
         self.MetaFile = FilePath
-        self._FileDir = self.MetaFile.Dir
         self._Defines = {}
         self._Packages = []
         self._FileLocalMacros = {}
@@ -736,6 +735,10 @@ class InfParser(MetaFileParser):
     @ParseMacro
     def _SourceFileParser(self):
         TokenList = GetSplitValueList(self._CurrentLine, TAB_VALUE_SPLIT)
+        # Let TokenList[2] be TagName|ToolCode|FeatureFlag
+        if len(TokenList) > 3:
+            for extraToken in range(3, len(TokenList)):
+                TokenList[2] = TokenList[2] + '|' + TokenList[extraToken]
         self._ValueList[0:len(TokenList)] = TokenList
         Macros = self._Macros
         # For Acpi tables, remove macro like ' TABLE_NAME=Sata1'
@@ -1179,9 +1182,6 @@ class DscParser(MetaFileParser):
     def _LibraryInstanceParser(self):
         self._ValueList[0] = self._CurrentLine
 
-
-    def _DecodeCODEData(self):
-        pass
     ## PCD sections parser
     #
     #   [PcdsFixedAtBuild]
@@ -1384,7 +1384,7 @@ class DscParser(MetaFileParser):
         self._SectionsMacroDict.clear()
         GlobalData.gPlatformDefines = {}
 
-        # Get all macro and PCD which has straitforward value
+        # Get all macro and PCD which has straightforward value
         self.__RetrievePcdValue()
         self._Content = self._RawTable.GetAll()
         self._ContentIndex = 0
@@ -1460,7 +1460,7 @@ class DscParser(MetaFileParser):
                                 self._ValueList[0],
                                 self._ValueList[1],
                                 self._ValueList[2],
-                                S1,
+                                self._Scope[0][0],
                                 S2,
                                 S3,
                                 NewOwner,
@@ -1707,6 +1707,7 @@ class DscParser(MetaFileParser):
 
     def __ProcessComponent(self):
         self._ValueList[0] = ReplaceMacro(self._ValueList[0], self._Macros)
+        self._Scope[0][0] = ReplaceMacro(self._Scope[0][0], self._Macros)
 
     def __ProcessBuildOption(self):
         self._ValueList = [ReplaceMacro(Value, self._Macros, RaiseError=False)
@@ -1788,8 +1789,6 @@ class DecParser(MetaFileParser):
         self._CurrentStructurePcdName = ""
         self._include_flag = False
         self._package_flag = False
-
-        self._RestofValue = ""
 
     ## Parser starter
     def Start(self):
@@ -1893,7 +1892,7 @@ class DecParser(MetaFileParser):
         self._SectionType = []
         ArchList = set()
         PrivateList = set()
-        Line = re.sub(',[\s]*', TAB_COMMA_SPLIT, self._CurrentLine)
+        Line = re.sub(r',[\s]*', TAB_COMMA_SPLIT, self._CurrentLine)
         for Item in Line[1:-1].split(TAB_COMMA_SPLIT):
             if Item == '':
                 EdkLogger.error("Parser", FORMAT_UNKNOWN_ERROR,

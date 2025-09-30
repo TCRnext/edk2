@@ -11,34 +11,28 @@
 
 #include <Uefi.h>
 
-#include <Chipset/ArmV7.h>
+#include <Arm/AArch32.h>
 
 #include <Library/ArmLib.h>
 
 #include <Protocol/DebugSupport.h> // for MAX_ARM_EXCEPTION
 
-UINTN                   gMaxExceptionNumber = MAX_ARM_EXCEPTION;
+UINTN                   gMaxExceptionNumber                       = MAX_ARM_EXCEPTION;
 EFI_EXCEPTION_CALLBACK  gExceptionHandlers[MAX_ARM_EXCEPTION + 1] = { 0 };
-EFI_EXCEPTION_CALLBACK  gDebuggerExceptionHandlers[MAX_ARM_EXCEPTION + 1] = { 0 };
-PHYSICAL_ADDRESS        gExceptionVectorAlignmentMask = ARM_VECTOR_TABLE_ALIGNMENT;
-
-// Exception handler contains branch to vector location (jmp $) so no handler
-// NOTE: This code assumes vectors are ARM and not Thumb code
-UINTN                   gDebuggerNoHandlerValue = 0xEAFFFFFE;
+PHYSICAL_ADDRESS        gExceptionVectorAlignmentMask             = ARM_VECTOR_TABLE_ALIGNMENT;
 
 RETURN_STATUS
 ArchVectorConfig (
-  IN  UINTN       VectorBaseAddress
+  IN  UINTN  VectorBaseAddress
   )
 {
   // if the vector address corresponds to high vectors
   if (VectorBaseAddress == 0xFFFF0000) {
     // set SCTLR.V to enable high vectors
-    ArmSetHighVectors();
-  }
-  else {
+    ArmSetHighVectors ();
+  } else {
     // Set SCTLR.V to 0 to enable VBAR to be used
-    ArmSetLowVectors();
+    ArmSetLowVectors ();
   }
 
   return RETURN_SUCCESS;

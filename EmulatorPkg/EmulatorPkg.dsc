@@ -122,16 +122,22 @@
   VarCheckLib|MdeModulePkg/Library/VarCheckLib/VarCheckLib.inf
   VariablePolicyLib|MdeModulePkg/Library/VariablePolicyLib/VariablePolicyLibRuntimeDxe.inf
   VariablePolicyHelperLib|MdeModulePkg/Library/VariablePolicyHelperLib/VariablePolicyHelperLib.inf
+  VariableFlashInfoLib|MdeModulePkg/Library/BaseVariableFlashInfoLib/BaseVariableFlashInfoLib.inf
   SortLib|MdeModulePkg/Library/BaseSortLib/BaseSortLib.inf
   ShellLib|ShellPkg/Library/UefiShellLib/UefiShellLib.inf
   FileHandleLib|MdePkg/Library/UefiFileHandleLib/UefiFileHandleLib.inf
-
-!if $(SECURE_BOOT_ENABLE) == TRUE
-  RngLib|MdePkg/Library/BaseRngLibTimerLib/BaseRngLibTimerLib.inf
+  ImagePropertiesRecordLib|MdeModulePkg/Library/ImagePropertiesRecordLib/ImagePropertiesRecordLib.inf
+  RngLib|MdeModulePkg/Library/BaseRngLibTimerLib/BaseRngLibTimerLib.inf
   IntrinsicLib|CryptoPkg/Library/IntrinsicLib/IntrinsicLib.inf
   OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLibCrypto.inf
+  BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
+
+!if $(SECURE_BOOT_ENABLE) == TRUE
   PlatformSecureLib|SecurityPkg/Library/PlatformSecureLibNull/PlatformSecureLibNull.inf
   AuthVariableLib|SecurityPkg/Library/AuthVariableLib/AuthVariableLib.inf
+  SecureBootVariableLib|SecurityPkg/Library/SecureBootVariableLib/SecureBootVariableLib.inf
+  PlatformPKProtectionLib|SecurityPkg/Library/PlatformPKProtectionLibVarPolicy/PlatformPKProtectionLibVarPolicy.inf
+  SecureBootVariableProvisionLib|SecurityPkg/Library/SecureBootVariableProvisionLib/SecureBootVariableProvisionLib.inf
 !else
   AuthVariableLib|MdeModulePkg/Library/AuthVariableLibNull/AuthVariableLibNull.inf
 !endif
@@ -273,6 +279,27 @@
   gEfiRedfishPkgTokenSpaceGuid.PcdRedfishRestExServiceDevicePath.DevicePath|{DEVICE_PATH("MAC(000000000000,0x1)")}
   gEfiRedfishPkgTokenSpaceGuid.PcdRedfishRestExServiceAccessModeInBand|False
   gEfiRedfishPkgTokenSpaceGuid.PcdRedfishDiscoverAccessModeInBand|False
+
+  gEmulatorPkgTokenSpaceGuid.PcdRedfishServiceStopIfSecureBootDisabled|False
+  gEmulatorPkgTokenSpaceGuid.PcdRedfishServiceStopIfExitbootService|False
+
+  gEfiRedfishClientPkgTokenSpaceGuid.PcdRedfishServiceEtagSupported|False
+
+  #
+  # Redfish Debug enablement
+  #
+  # 0x0000000000000001  RedfishPlatformConfigDxe driver debug enabled.
+  gEfiRedfishPkgTokenSpaceGuid.PcdRedfishDebugCategory|0
+  #   0x00000001  x-uefi-redfish string database message enabled
+  #   0x00000002  Debug Message for dumping formset
+  #   0x00000004  Debug Message for x-uefi-redfish searching result
+  #   0x00000008  Debug Message for x-uefi-redfish Regular Expression searching result
+  gEfiRedfishPkgTokenSpaceGuid.PcdRedfishPlatformConfigDebugProperty|0
+
+  # Redfish Platform Configure DXE driver feature enablement
+  #   0x00000001  Enable building Redfish Attribute Registry menu path.
+  #   0x00000002  Allow supressed HII option to be exposed on Redfish.
+  gEfiRedfishPkgTokenSpaceGuid.PcdRedfishPlatformConfigFeatureProperty|0
 !endif
 
 [PcdsDynamicDefault.common.DEFAULT]
@@ -292,11 +319,17 @@
     #  Emulator, OS WIN application
     #  CLANGPDB is cross OS tool chain. It depends on WIN_HOST_BUILD flag
     #  to build WinHost application.
+    #
+    # USER_DEFINED components skip normal NULL lib linking, so we have to link this
+    # specially here for the libs that have stack guard enabled
     ##
     EmulatorPkg/Win/Host/WinHost.inf
   !else
     ##
     #  Emulator, OS POSIX application
+    #
+    # USER_DEFINED components skip normal NULL lib linking, so we have to link this
+    # specially here for the libs that have stack guard enabled
     ##
     EmulatorPkg/Unix/Host/Host.inf
   !endif
@@ -371,6 +404,15 @@
   MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
   EmulatorPkg/PlatformSmbiosDxe/PlatformSmbiosDxe.inf
   EmulatorPkg/TimerDxe/Timer.inf
+
+  #
+  # Rng Protocol producer
+  #
+  SecurityPkg/RandomNumberGenerator/RngDxe/RngDxe.inf
+  #
+  # Hash2 Protocol producer
+  #
+  SecurityPkg/Hash2DxeCrypto/Hash2DxeCrypto.inf
 
 !if $(SECURE_BOOT_ENABLE) == TRUE
   SecurityPkg/VariableAuthenticated/SecureBootConfigDxe/SecureBootConfigDxe.inf
@@ -501,15 +543,15 @@
   MSFT:NOOPT_*_*_CC_FLAGS = /Od /Oy-
   GCC:DEBUG_CLANGPDB_*_CC_FLAGS =-O0 -Wno-unused-command-line-argument -Wno-incompatible-pointer-types -Wno-enum-conversion -Wno-incompatible-pointer-types -Wno-sometimes-uninitialized -Wno-constant-conversion -Wno-main-return-type
 
-  MSFT:*_*_*_DLINK_FLAGS     = /ALIGN:4096 /FILEALIGN:4096 /SUBSYSTEM:CONSOLE
-  MSFT:DEBUG_*_*_DLINK_FLAGS = /EXPORT:InitializeDriver=$(IMAGE_ENTRY_POINT) /BASE:0x10000
-  MSFT:NOOPT_*_*_DLINK_FLAGS = /EXPORT:InitializeDriver=$(IMAGE_ENTRY_POINT) /BASE:0x10000
+  MSFT:*_*_*_DLINK_FLAGS     = /ALIGN:4096 /FILEALIGN:4096
+  MSFT:DEBUG_*_*_DLINK_FLAGS = /BASE:0x10000
+  MSFT:NOOPT_*_*_DLINK_FLAGS = /BASE:0x10000
 
 !if $(WIN_HOST_BUILD) == TRUE
   #
   # CLANGPDB tool chain depends on WIN_HOST_BUILD flag to generate the windows application.
   #
-  GCC:*_CLANGPDB_*_DLINK_FLAGS     = /ALIGN:4096 /FILEALIGN:4096 /SUBSYSTEM:CONSOLE
-  GCC:DEBUG_CLANGPDB_*_DLINK_FLAGS = /EXPORT:InitializeDriver=$(IMAGE_ENTRY_POINT) /BASE:0x10000
-  GCC:NOOPT_CLANGPDB_*_DLINK_FLAGS = /EXPORT:InitializeDriver=$(IMAGE_ENTRY_POINT) /BASE:0x10000
+  GCC:*_CLANGPDB_*_DLINK_FLAGS     = /ALIGN:4096 /FILEALIGN:4096
+  GCC:DEBUG_CLANGPDB_*_DLINK_FLAGS = /BASE:0x10000
+  GCC:NOOPT_CLANGPDB_*_DLINK_FLAGS = /BASE:0x10000
 !endif

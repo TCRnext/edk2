@@ -1,7 +1,7 @@
 /*++ @file
 Vfr Syntax
 
-Copyright (c) 2004 - 2019, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2004 - 2025, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 --*/
@@ -111,6 +111,7 @@ VfrParserStart (
 #token CloseBracket("]")                        "\]"
 
 #token LineDefinition                           "#line\ [0-9]+\ \"~[\"]+\"[\ \t]*\n" << gCVfrErrorHandle.ParseFileScopeRecord (begexpr (), line ()); skip (); newline (); >>
+#token GccLineDefinition                        "#\ [0-9]+\ \"~[\"]+\"[\ \t]*([1234][\ \t]*)*\n" << gCVfrErrorHandle.ParseFileScopeRecord (begexpr (), line ()); skip (); newline (); >>
 #token DevicePath("devicepath")                 "devicepath"
 #token FormSet("formset")                       "formset"
 #token FormSetId("formsetid")                   "formsetid"
@@ -2930,6 +2931,7 @@ vfrNumericFlags [CIfrNumeric & NObj, UINT32 LineNum] :
                                                             }
                                                             _PCATCH(NObj.SetFlags (HFlags, LFlags, IsDisplaySpecified), LineNum);
                                                           } else if ((_GET_CURRQEST_VARTINFO().mVarStoreId != EFI_VARSTORE_ID_INVALID) && (_GET_CURRQEST_VARTINFO().mIsBitVar)) {
+                                                            LFlags &= EDKII_IFR_DISPLAY_BIT;
                                                             LFlags |= (EDKII_IFR_NUMERIC_SIZE_BIT & (_GET_CURRQEST_VARSIZE()));
                                                             _PCATCH(NObj.SetFlagsForBitField (HFlags, LFlags, IsDisplaySpecified), LineNum);
                                                           }
@@ -3105,6 +3107,8 @@ vfrOneofFlagsField [CIfrOneOf & OObj, UINT32 LineNum] :
                                                             }
                                                             _PCATCH(OObj.SetFlags (HFlags, LFlags), LineNum);
                                                           } else if (_GET_CURRQEST_VARTINFO().mVarStoreId != EFI_VARSTORE_ID_INVALID) {
+                                                            LFlags &= EDKII_IFR_DISPLAY_BIT;
+                                                            LFlags |= (EDKII_IFR_NUMERIC_SIZE_BIT & (_GET_CURRQEST_VARSIZE()));
                                                             _PCATCH(OObj.SetFlagsForBitField (HFlags, LFlags), LineNum);
                                                           }
                                                        >>

@@ -14,28 +14,51 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/DebugLib.h>
 
 /* Convert character to lowercase */
-int tolower (int c)
+#ifdef _MSC_VER
+//
+// Workaround for building NOOPT on Windows systems. Due to disabled
+// optimization, the MSVC compiler cannot hide this function
+// implementation from the linker.
+//
+int
+tolower_noos (
+  int  c
+  )
+  #pragma comment(linker, "/alternatename:tolower=tolower_noos")
+#else
+int
+tolower (
+  int  c
+  )
+#endif
 {
   if (('A' <= (c)) && ((c) <= 'Z')) {
     return (c - ('A' - 'a'));
   }
+
   return (c);
 }
 
 /* Compare first n bytes of string s1 with string s2, ignoring case */
-int strncasecmp (const char *s1, const char *s2, size_t n)
+int
+strncasecmp (
+  const char  *s1,
+  const char  *s2,
+  size_t      n
+  )
 {
-  int Val;
+  int  Val;
 
-  ASSERT(s1 != NULL);
-  ASSERT(s2 != NULL);
+  ASSERT (s1 != NULL);
+  ASSERT (s2 != NULL);
 
   if (n != 0) {
     do {
-      Val = tolower(*s1) - tolower(*s2);
+      Val = tolower (*s1) - tolower (*s2);
       if (Val != 0) {
         return Val;
       }
+
       ++s1;
       ++s2;
       if (*s1 == '\0') {
@@ -43,11 +66,17 @@ int strncasecmp (const char *s1, const char *s2, size_t n)
       }
     } while (--n != 0);
   }
+
   return 0;
 }
 
 /* Read formatted data from a string */
-int sscanf (const char *buffer, const char *format, ...)
+int
+sscanf (
+  const char  *buffer,
+  const char  *format,
+  ...
+  )
 {
   //
   // Null sscanf() function implementation to satisfy the linker, since
@@ -56,38 +85,56 @@ int sscanf (const char *buffer, const char *format, ...)
   return 0;
 }
 
-//
-//  -- Dummy OpenSSL Support Routines --
-//
-
-int BIO_printf (void *bio, const char *format, ...)
+uid_t
+getuid (
+  void
+  )
 {
   return 0;
 }
 
-int BIO_snprintf(char *buf, size_t n, const char *format, ...)
+uid_t
+geteuid (
+  void
+  )
 {
   return 0;
 }
 
-uid_t getuid (void)
+gid_t
+getgid (
+  void
+  )
 {
   return 0;
 }
 
-uid_t geteuid (void)
+gid_t
+getegid (
+  void
+  )
 {
   return 0;
 }
 
-gid_t getgid (void)
+unsigned int
+sleep (
+  unsigned int  seconds
+  )
 {
   return 0;
 }
 
-gid_t getegid (void)
+int
+gettimeofday (
+  struct timeval   *tv,
+  struct timezone  *tz
+  )
 {
+  tv->tv_sec  = 0;
+  tv->tv_usec = 0;
   return 0;
 }
 
-int errno = 0;
+int   errno = 0;
+long  timezone;

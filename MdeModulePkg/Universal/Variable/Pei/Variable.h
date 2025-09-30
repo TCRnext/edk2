@@ -20,11 +20,16 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/BaseMemoryLib.h>
 #include <Library/PeiServicesTablePointerLib.h>
 #include <Library/PeiServicesLib.h>
+#include <Library/SafeIntLib.h>
+#include <Library/VariableFlashInfoLib.h>
+#include <Library/MmUnblockMemoryLib.h>
+#include <Library/MemoryAllocationLib.h>
 
 #include <Guid/VariableFormat.h>
 #include <Guid/VariableIndexTable.h>
 #include <Guid/SystemNvDataGuid.h>
 #include <Guid/FaultTolerantWrite.h>
+#include <Guid/VariableRuntimeCacheInfo.h>
 
 typedef enum {
   VariableStoreTypeHob,
@@ -47,6 +52,7 @@ typedef struct {
 //
 // Functions
 //
+
 /**
   Provide the functionality of the variable services.
 
@@ -61,8 +67,8 @@ typedef struct {
 EFI_STATUS
 EFIAPI
 PeimInitializeVariableServices (
-  IN       EFI_PEI_FILE_HANDLE       FileHandle,
-  IN CONST EFI_PEI_SERVICES          **PeiServices
+  IN       EFI_PEI_FILE_HANDLE  FileHandle,
+  IN CONST EFI_PEI_SERVICES     **PeiServices
   );
 
 /**
@@ -95,12 +101,12 @@ PeimInitializeVariableServices (
 EFI_STATUS
 EFIAPI
 PeiGetVariable (
-  IN CONST  EFI_PEI_READ_ONLY_VARIABLE2_PPI *This,
-  IN CONST  CHAR16                          *VariableName,
-  IN CONST  EFI_GUID                        *VariableGuid,
-  OUT       UINT32                          *Attributes,
-  IN OUT    UINTN                           *DataSize,
-  OUT       VOID                            *Data OPTIONAL
+  IN CONST  EFI_PEI_READ_ONLY_VARIABLE2_PPI  *This,
+  IN CONST  CHAR16                           *VariableName,
+  IN CONST  EFI_GUID                         *VariableGuid,
+  OUT       UINT32                           *Attributes,
+  IN OUT    UINTN                            *DataSize,
+  OUT       VOID                             *Data OPTIONAL
   );
 
 /**
@@ -135,10 +141,10 @@ PeiGetVariable (
 EFI_STATUS
 EFIAPI
 PeiGetNextVariableName (
-  IN CONST  EFI_PEI_READ_ONLY_VARIABLE2_PPI *This,
-  IN OUT UINTN                              *VariableNameSize,
-  IN OUT CHAR16                             *VariableName,
-  IN OUT EFI_GUID                           *VariableGuid
+  IN CONST  EFI_PEI_READ_ONLY_VARIABLE2_PPI  *This,
+  IN OUT UINTN                               *VariableNameSize,
+  IN OUT CHAR16                              *VariableName,
+  IN OUT EFI_GUID                            *VariableGuid
   );
 
 #endif

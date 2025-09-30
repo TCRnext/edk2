@@ -11,34 +11,45 @@
 #ifndef AARCH64_LIB_H_
 #define AARCH64_LIB_H_
 
-typedef VOID (*AARCH64_CACHE_OPERATION)(UINTN);
-
-VOID
-AArch64AllDataCachesOperation (
-  IN  AARCH64_CACHE_OPERATION  DataCacheOperation
-  );
-
-VOID
+UINTN
 EFIAPI
-ArmInvalidateDataCacheEntryBySetWay (
-  IN  UINTN  SetWayFormat
-  );
-
-VOID
-EFIAPI
-ArmCleanDataCacheEntryBySetWay (
-  IN  UINTN  SetWayFormat
-  );
-
-VOID
-EFIAPI
-ArmCleanInvalidateDataCacheEntryBySetWay (
-  IN  UINTN   SetWayFormat
+ArmReadIdAA64Dfr0 (
+  VOID
   );
 
 UINTN
 EFIAPI
-ArmReadIdAA64Pfr0 (
+ArmReadIdAA64Dfr1 (
+  VOID
+  );
+
+UINTN
+EFIAPI
+ArmReadIdAA64Isar0 (
+  VOID
+  );
+
+UINTN
+EFIAPI
+ArmReadIdAA64Isar1 (
+  VOID
+  );
+
+UINTN
+EFIAPI
+ArmReadIdAA64Isar2 (
+  VOID
+  );
+
+UINTN
+EFIAPI
+ArmReadIdAA64Mmfr0 (
+  VOID
+  );
+
+UINTN
+EFIAPI
+ArmReadIdAA64Mmfr1 (
   VOID
   );
 
@@ -52,5 +63,22 @@ ArmReadIdAA64Mmfr2 (
   VOID
   );
 
-#endif // AARCH64_LIB_H_
+UINTN
+EFIAPI
+ArmReadIdAA64Pfr0 (
+  VOID
+  );
 
+UINTN
+EFIAPI
+ArmReadIdAA64Pfr1 (
+  VOID
+  );
+
+UINTN
+EFIAPI
+ArmReadIdAA64Pfr2 (
+  VOID
+  );
+
+#endif // AARCH64_LIB_H_

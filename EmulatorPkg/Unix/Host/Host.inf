@@ -2,7 +2,7 @@
 # Entry Point of Emu Emulator
 #
 # Main executable file of Unix Emulator that loads PEI core after initialization finished.
-# Copyright (c) 2008 - 2019, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2008 - 2022, Intel Corporation. All rights reserved.<BR>
 # Portions copyright (c) 2008 - 2011, Apple Inc. All rights reserved.<BR>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -61,6 +61,7 @@
   PpiListLib
   PeiServicesLib
   PeCoffGetEntryPointLib
+  StackCheckLib
 
 [Ppis]
   gEfiPeiStatusCodePpiGuid                      # PPI ALWAYS_PRODUCED
@@ -106,6 +107,7 @@
   gEmulatorPkgTokenSpaceGuid.PcdEmuFlashNvStorageFtwSpareBase
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareSize
   gEmulatorPkgTokenSpaceGuid.PcdPeiServicesTablePage
+  gEmulatorPkgTokenSpaceGuid.PcdPersistentMemorySize
 
 [FeaturePcd]
   gEmulatorPkgTokenSpaceGuid.PcdEmulatorLazyLoadSymbols
@@ -123,6 +125,7 @@
    GCC:*_GCC48_X64_CC_FLAGS = "-DEFIAPI=__attribute__((ms_abi))"
    GCC:*_GCC49_X64_CC_FLAGS = "-DEFIAPI=__attribute__((ms_abi))"
    GCC:*_GCC5_X64_CC_FLAGS = "-DEFIAPI=__attribute__((ms_abi))" -flto -DUSING_LTO -Os
+   GCC:*_GCC_X64_CC_FLAGS = "-DEFIAPI=__attribute__((ms_abi))" -flto -DUSING_LTO -Os
    GCC:*_*_X64_PP_FLAGS == -m64 -E -x assembler-with-cpp -include $(DEST_DIR_DEBUG)/AutoGen.h
    GCC:*_*_X64_ASM_FLAGS == -m64 -c -x assembler -imacros $(DEST_DIR_DEBUG)/AutoGen.h
 
