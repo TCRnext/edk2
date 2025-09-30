@@ -66,7 +66,7 @@
   gEmulatorPkgTokenSpaceGuid.PcdEmuFirmwareBlockSize|0|UINT32|0x00001013
 
   ## Number of Application Processors (APs) in the system 0 means Uniprocessor mode
-  gEmulatorPkgTokenSpaceGuid.PcdEmuApCount|L"0"|VOID*|0x00001019
+  gEmulatorPkgTokenSpaceGuid.PcdEmuApCount|L"7"|VOID*|0x00001019
 
   ## Magic page to implement PEI Services Table Pointer Lib
   gEmulatorPkgTokenSpaceGuid.PcdPeiServicesTablePage|0x1013000000|UINT64|0x0000101b

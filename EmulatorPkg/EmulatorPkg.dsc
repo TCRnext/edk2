@@ -229,7 +229,7 @@
   gEfiSecurityPkgTokenSpaceGuid.PcdUserPhysicalPresence|TRUE
 !endif
 
-  gEmulatorPkgTokenSpaceGuid.PcdEmuMemorySize|L"64!64"
+  gEmulatorPkgTokenSpaceGuid.PcdEmuMemorySize|L"2048!2048"
 
   # Change PcdBootManagerMenuFile to UiApp
   gEfiMdeModulePkgTokenSpaceGuid.PcdBootManagerMenuFile|{ 0x21, 0xaa, 0x2c, 0x46, 0x14, 0x76, 0x03, 0x45, 0x83, 0x6e, 0x8a, 0xb6, 0xf4, 0x66, 0x23, 0x31 }
@@ -248,7 +248,7 @@
 #define BOOT_IN_RECOVERY_MODE                         0x20
   gEmulatorPkgTokenSpaceGuid.PcdEmuBootMode|0
 
-  gEmulatorPkgTokenSpaceGuid.PcdEmuApCount|L"1"
+  gEmulatorPkgTokenSpaceGuid.PcdEmuApCount|L"7"
 
   # For a CD-ROM/DVD use L"diag.dmg:RO:2048"
   gEmulatorPkgTokenSpaceGuid.PcdEmuVirtualDisk|L"disk.dmg:FW"
@@ -431,6 +431,10 @@
   # my app
   #
   testpkg/applications/lvgl_test/lvgl_test.inf{
+    <LibraryClasses>
+    UefiUsbLib|MdePkg/Library/UefiUsbLib/UefiUsbLib.inf
+  }
+  aurorapkg/applications/jginyue_framework/jginyue_framework.inf{
     <LibraryClasses>
     UefiUsbLib|MdePkg/Library/UefiUsbLib/UefiUsbLib.inf
   }
